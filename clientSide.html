@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <style>
+  		#wrapper { width:50%; margin-top:50px; margin-left: auto; margin-right: auto;}
+  		.selection { text-align: center; margin-top: 20px; }
+  		#result_holder { width: 100%; margin-top:15px; margin-left: auto; margin-right: auto;}
+  		.divresult { height:400px; border: 1px solid #4477AA; overflow-y: 400px; }
+  </style>
+
+  <script>
+  	$(document).ready(function(){
+  		$("#search").click(function(){
+        	var searchtext = $("#searchdata").val();
+        	searchtext = $.trim(searchtext);
+        	
+        	if(searchtext.length < 2) { 
+        		$("#result_holder").html('<strong>Error!</strong> Enter atleast 2 character to search.')
+        						   .addClass('alert alert-danger');
+
+        		return false;
+        	} 
+        	else if($('input[name="searchtype"]:checked').val() == undefined) { 
+        		$("#result_holder").html('<strong>Error!</strong>Select title or singer.');
+
+        		return false;
+        	}
+        	else { 
+        		return true; 
+        	}
+    	});
+	});
+  </script>
+<title>Simple API Client | Music Search</title>
+</head>
+
+<body>
+	<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">Music Search</a>
+    </div>
+  </div>
+</nav>
+  
+<div class="container">
+	
+	<div id="wrapper">
+  	<form method="post" action="<?phph $_SERVER['PHP_SELF']; ?>">
+  	<div class="input-group">
+        <input type="text" class="form-control" placeholder="Search song Title or Singer..." name="searchdata" id="searchdata">
+        	<div class="input-group-btn">
+                <button class="btn btn-default" type="submit" id="search"><i class="glyphicon glyphicon-search"></i></button>
+            </div>
+    </div>
+    	<div class="selection">
+    	<label class="radio-inline">
+      		<input type="radio" name="searchtype" value="1" checked="checked">Song Title
+    	</label>
+    	<label class="radio-inline">
+      		<input type="radio" name="searchtype" value="2">Singer
+    	</label>
+    	</div>
+    	<div id="result_holder"></div>
+
+    	<div class="table-responsive divresult">
+  			<table class="table">
+    			<thead>
+      			<tr>
+        			<th>#</th>
+        			<th>Song Title</th>
+        			<th>Singer</th>
+      			</tr>
+   				</thead>
+    			<tbody>
+      			<tr>
+        			<td>1</td>
+        			<td>Anna</td>
+        			<td>Pitt</td>
+      			</tr>
+
+    			</tbody>
+  			</table>
+  		</div>
+	</div>
+
+
+	<!--<?php 
+	if(isset($_POST[''])) { 
+		$api_data = file_get_contents('http://{Your Website}/myMusicApi.php?type=get_app&id=' . $_GET["id"]);
+  		$api_data = json_decode($api_data, true);
+	}
+	
+	?>-->
+
+</div>
+</body>
+
+</html>
