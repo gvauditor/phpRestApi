@@ -51,11 +51,11 @@
 <div class="container">
 	
 	<div id="wrapper">
-  	<form method="post" action="<?phph $_SERVER['PHP_SELF']; ?>">
+  	<form method="post" action="<?php $_SERVER['PHP_SELF']; ?>">
   	<div class="input-group">
-        <input type="text" class="form-control" placeholder="Search song Title or Singer..." name="searchdata" id="searchdata">
+        <input type="text" class="form-control" placeholder="Search song Title or Singer..." name="searchdata" id="searchdata" value="<?php if(isset($_POST['searchdata'])) echo $_POST['searchdata']; ?> ">
         	<div class="input-group-btn">
-                <button class="btn btn-default" type="submit" id="search"><i class="glyphicon glyphicon-search"></i></button>
+                <button class="btn btn-default" type="submit" id="search" name="search"><i class="glyphicon glyphicon-search"></i></button>
             </div>
     </div>
     	<div class="selection">
@@ -66,8 +66,17 @@
       		<input type="radio" name="searchtype" value="2">Singer
     	</label>
     	</div>
+      </form>
     	<div id="result_holder"></div>
 
+      <?php 
+          if(isset($_POST['search'])) { 
+              $type = $_POST['searchtype'];
+              $data = $_POST['searchdata']; 
+
+              $api_data = file_get_contents("http://localhost:8080/phpRestApi/myMusicApi.php?type=$type&data=$data");
+              $data = json_decode($api_data, true);
+      ?>
     	<div class="table-responsive divresult">
   			<table class="table">
     			<thead>
@@ -78,25 +87,23 @@
       			</tr>
    				</thead>
     			<tbody>
-      			<tr>
-        			<td>1</td>
-        			<td>Anna</td>
-        			<td>Pitt</td>
+      			<?php 
+            if($data == NULL) { 
+              echo "<tr><td colspan='3'><div class='alert alert-info'><strong>Search result!</strong> No data found!</div></td></tr>"; 
+            }
+            else { 
+            foreach ($data AS $row) { ?>
+            <tr>
+        			<td><?php echo $row['id']; ?></td>
+        			<td><?php echo $row['title']; ?></td>
+        			<td><?php echo $row['singer']; ?></td>
       			</tr>
-
+            <?php } } ?>
     			</tbody>
   			</table>
   		</div>
 	</div>
-
-
-	<!--<?php 
-	if(isset($_POST[''])) { 
-		$api_data = file_get_contents('http://{Your Website}/myMusicApi.php?type=get_app&id=' . $_GET["id"]);
-  		$api_data = json_decode($api_data, true);
-	}
-	
-	?>-->
+	<?php } ?>
 
 </div>
 </body>

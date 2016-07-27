@@ -37,7 +37,7 @@ Class MusicBank {
 	function search() { 
 		$condition = ($this->searchType == 1) ? 'title' : 'singer'; 
 
-		$sql = "SELECT title,singer FROM musics WHERE ".$cond." LIKE '%$this->searchData%' ";
+		$sql = "SELECT id,title,singer FROM musics WHERE ".$condition." LIKE '%$this->searchData%' ";
 		$result = $this->conn->query($sql); 
 
 		if ($result->num_rows > 0) {
@@ -49,22 +49,21 @@ Class MusicBank {
     		$return = json_encode($rows); 
 		} 
 		else {
-    		$return = '0';
+			$return = 0;
 		}
 
 		return $return;
 	}
 }
-
-
-$music = new MusicBank(); 
+ 
+$music = new MusicBank($_GET['type'],$_GET['data']); 
 $msg = $music->validate(); 
 
-if($msg = '') { 
-	$music->search(); 
+if($msg == '') { 
+	exit($music->search()); 
 }
 else { 
-	return $msg; 
+	exit(json_encode($msg)); 
 }
 
 ?>
