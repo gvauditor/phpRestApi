@@ -65,5 +65,4 @@ if($msg == '') {
 else { 
 	exit(json_encode($msg)); 
 }
-
 ?>

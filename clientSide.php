@@ -53,17 +53,21 @@
 	<div id="wrapper">
   	<form method="post" action="<?php $_SERVER['PHP_SELF']; ?>">
   	<div class="input-group">
-        <input type="text" class="form-control" placeholder="Search song Title or Singer..." name="searchdata" id="searchdata" value="<?php if(isset($_POST['searchdata'])) echo $_POST['searchdata']; ?> ">
+        <input type="text" class="form-control" placeholder="Search song Title or Singer..." name="searchdata" id="searchdata" value="<?php if(isset($_POST['searchdata'])) echo $_POST['searchdata']; ?>">
         	<div class="input-group-btn">
                 <button class="btn btn-default" type="submit" id="search" name="search"><i class="glyphicon glyphicon-search"></i></button>
             </div>
     </div>
     	<div class="selection">
     	<label class="radio-inline">
-      		<input type="radio" name="searchtype" value="1" checked="checked">Song Title
+      		<?php
+				$chk = (!isset($_POST['searchtype']) || (isset($_POST['searchtype']) && $_POST['searchtype']) == 1) ? "checked='checked'" : ""; 
+				$chk2 = (isset($_POST['searchtype']) && $_POST['searchtype'] == 2) ? "checked='checked'" : "";
+			?>
+			<input type="radio" name="searchtype" value="1" <?php echo $chk; ?>>Song Title
     	</label>
     	<label class="radio-inline">
-      		<input type="radio" name="searchtype" value="2">Singer
+      		<input type="radio" name="searchtype" value="2" <?php echo $chk2; ?>>Singer
     	</label>
     	</div>
       </form>
@@ -73,9 +77,11 @@
           if(isset($_POST['search'])) { 
               $type = $_POST['searchtype'];
               $data = $_POST['searchdata']; 
-
-              $api_data = file_get_contents("http://localhost:8080/phpRestApi/myMusicApi.php?type=$type&data=$data");
+				
+              $api_data = file_get_contents("http://localhost/phpRestApi/myMusicApi.php?type=$type&data=$data");
               $data = json_decode($api_data, true);
+			  
+			  //echo var_dump($api_data);
       ?>
     	<div class="table-responsive divresult">
   			<table class="table">
